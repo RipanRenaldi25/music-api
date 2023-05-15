@@ -29,15 +29,20 @@ class AlbumsHandler {
   }
 
   async postAlbumHandler(request, h) {
-    const albumId = await this._services.postAlbum(request.payload);
-    const response = h.response({
-      status: 'success',
-      data: {
-        albumId,
-      },
-    });
-    response.code(201);
-    return response;
+    try {
+      this._validator.validateAlbumPayload(request.payload);
+      const albumId = await this._services.postAlbum(request.payload);
+      const response = h.response({
+        status: 'success',
+        data: {
+          albumId,
+        },
+      });
+      response.code(201);
+      return response;
+    } catch (e) {
+      return e.message;
+    }
   }
 }
 
