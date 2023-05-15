@@ -25,16 +25,20 @@ class AlbumServices {
   }
 
   async postAlbum({ name, year }) {
-    const albumId = `album-${nanoid(16)}`;
-    const query = {
-      text: 'INSERT INTO albums VALUES($1, $2, $3) RETURNING id',
-      values: [albumId, name, year],
-    };
-    const result = await this._pool.query(query);
-    if (!result.rows.length) {
-      throw new Error('Insert data gagal');
+    try {
+      const albumId = `album-${nanoid(16)}`;
+      const query = {
+        text: 'INSERT INTO albums VALUES($1, $2, $3) RETURNING id',
+        values: [albumId, name, year],
+      };
+      const result = await this._pool.query(query);
+      if (!result.rows.length) {
+        throw new Error('Insert data gagal');
+      }
+      return result.rows[0].id;
+    } catch (e) {
+      console.log(e);
     }
-    return result.rows[0].id;
   }
 }
 

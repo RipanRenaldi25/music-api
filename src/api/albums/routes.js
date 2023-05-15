@@ -7,12 +7,12 @@ const albumsRouter = (handler) => [
   {
     method: 'GET',
     path: '/albums/{id}',
-    handler: (request, h) => handler.getAlbumById(request, h),
+    handler: (request, h) => handler.getAlbumByIdHandler(request, h),
   },
   {
     method: 'POST',
     path: '/albums',
-    handler: (request, h) => handler.postAlbum(request, h),
+    handler: (request, h) => handler.postAlbumHandler(request, h),
   },
 ];
 
