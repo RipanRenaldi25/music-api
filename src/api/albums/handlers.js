@@ -60,7 +60,7 @@ class AlbumsHandler {
         return h.response({
           status: 'fail',
           message: error.message,
-        }).code(error.statuscode);
+        }).code(error.statusCode);
       }
       return h.response({
         status: 'error',

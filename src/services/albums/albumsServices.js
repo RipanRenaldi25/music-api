@@ -57,7 +57,7 @@ class AlbumServices {
     };
     const result = await this._pool.query(query);
     if (!result.rows.length) {
-      throw new InvariantError('Album gagal diperbarui');
+      throw new NotFoundError('Album gagal diperbarui. Tidak dapat menemukan id yang dicari');
     }
   }
 }
