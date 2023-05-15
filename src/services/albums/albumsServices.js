@@ -38,6 +38,26 @@ class AlbumServices {
     }
     return result.rows[0].id;
   }
+
+  async deleteAlbum(id) {
+    const query = {
+      text: 'DELETE FROM albums WHERE id=$1 RETURNING id',
+      values: [id],
+    };
+    const result = await this._pool.query(query);
+    if (!result.rows.length) {
+      throw new InvariantError('Album gagal dihapus. Tidak dapat menemukan id yang dicari');
+    }
+  }
+
+  async editAlbum(id, { name, year }) {
+    const query = {
+      text: 'UPDATE abums SET name=$1, year=$2 WHERE id=$3',
+      values: [name, year, id],
+    };
+    const result = await this._pool.query(query);
+    console.log(result);
+  }
 }
 
 module.exports = AlbumServices;

@@ -68,6 +68,30 @@ class AlbumsHandler {
       }).code(500);
     }
   }
+
+  async deleteAlbumHandler(request, h) {
+    try {
+      const { id } = request.params;
+      await this._services.deleteAlbum(id);
+      const response = h.response({
+        status: 'success',
+        message: 'Album berhasil dihapus',
+      });
+      response.code(200);
+      return response;
+    } catch (error) {
+      if (error instanceof ClientError) {
+        return h.response({
+          status: 'fail',
+          message: error.message,
+        }).code(error.statusCode);
+      }
+      return h.response({
+        status: 'error',
+        message: 'Sistem sedang mengalami kendala',
+      }).code(500);
+    }
+  }
 }
 
 module.exports = AlbumsHandler;
