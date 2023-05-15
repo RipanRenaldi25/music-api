@@ -1,3 +1,5 @@
+const ClientError = require('../../exceptions/ClientError');
+
 class AlbumsHandler {
   constructor(services, validator) {
     this._services = services;
@@ -16,16 +18,29 @@ class AlbumsHandler {
   }
 
   async getAlbumByIdHandler(request, h) {
-    const { id } = request.params;
-    const album = await this._services.getAlbumById(id);
-    const response = h.response({
-      status: 'success',
-      data: {
-        album,
-      },
-    });
-    response.code(200);
-    return response;
+    try {
+      const { id } = request.params;
+      const album = await this._services.getAlbumById(id);
+      const response = h.response({
+        status: 'success',
+        data: {
+          album,
+        },
+      });
+      response.code(200);
+      return response;
+    } catch (error) {
+      if (error instanceof ClientError) {
+        return h.response({
+          status: 'fail',
+          message: error.message,
+        }).code(error.statusCode);
+      }
+      return h.response({
+        status: 'error',
+        message: 'Sistem sedang mengalami kendala',
+      }).code(500);
+    }
   }
 
   async postAlbumHandler(request, h) {
@@ -40,8 +55,17 @@ class AlbumsHandler {
       });
       response.code(201);
       return response;
-    } catch (e) {
-      return e.message;
+    } catch (error) {
+      if (error instanceof ClientError) {
+        return h.response({
+          status: 'fail',
+          message: error.message,
+        }).code(error.statuscode);
+      }
+      return h.response({
+        status: 'error',
+        message: 'Sistem sedang mengalami kendala',
+      }).code(500);
     }
   }
 }
