@@ -92,6 +92,31 @@ class AlbumsHandler {
       }).code(500);
     }
   }
+
+  async putAlbumHandler(request, h) {
+    try {
+      this._validator.validateAlbumPayload(request.payload);
+      const { id } = request.params;
+      await this._services.editAlbum(id, { ...request.payload });
+      const response = h.response({
+        status: 'success',
+        message: 'Album berhasil diperbaharui',
+      });
+      response.code(200);
+      return response;
+    } catch (error) {
+      if (error instanceof ClientError) {
+        return h.response({
+          status: 'fail',
+          message: error.message,
+        }).code(error.statusCode);
+      }
+      return h.response({
+        status: 'error',
+        message: 'Sistem sedang mengalami kendala',
+      }).code(500);
+    }
+  }
 }
 
 module.exports = AlbumsHandler;

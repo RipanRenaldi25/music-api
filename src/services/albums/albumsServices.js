@@ -46,17 +46,19 @@ class AlbumServices {
     };
     const result = await this._pool.query(query);
     if (!result.rows.length) {
-      throw new InvariantError('Album gagal dihapus. Tidak dapat menemukan id yang dicari');
+      throw new NotFoundError('Album gagal dihapus. Tidak dapat menemukan id yang dicari');
     }
   }
 
   async editAlbum(id, { name, year }) {
     const query = {
-      text: 'UPDATE abums SET name=$1, year=$2 WHERE id=$3',
+      text: 'UPDATE albums SET name=$1, year=$2 WHERE id=$3 RETURNING id',
       values: [name, year, id],
     };
     const result = await this._pool.query(query);
-    console.log(result);
+    if (!result.rows.length) {
+      throw new InvariantError('Album gagal diperbarui');
+    }
   }
 }
 
