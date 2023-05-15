@@ -11,7 +11,7 @@ exports.up = (pgm) => {
       notNull: true,
     },
     year: {
-      type: 'VARCHAR(255)',
+      type: 'INT',
       notNull: true,
     },
   });
