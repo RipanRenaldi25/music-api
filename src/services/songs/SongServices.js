@@ -28,6 +28,16 @@ class SongServices {
     return result.rows;
   }
 
+  async getSongsByQueryParams({ title, performer }) {
+    const query = {
+      // eslint-disable-next-line quotes
+      text: `SELECT id, title, performer FROM songs WHERE LOWER(title) LIKE '%' || $1 || '%' OR LOWER(performer) LIKE '%' || $2 || '%'`,
+      values: [title, performer],
+    };
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
   async getSongById(id) {
     const query = {
       text: 'SELECT * FROM songs WHERE id=$1',
@@ -48,9 +58,8 @@ class SongServices {
       values: [title, year, genre, performer, duration, albumId, id],
     };
     const result = await this._pool.query(query);
-    console.log(result);
     if (!result.rows.length) {
-      throw NotFoundError('Gagal memperbaharui data. Pastikan id benar');
+      throw new NotFoundError('Gagal memperbaharui data. Pastikan id benar');
     }
   }
 

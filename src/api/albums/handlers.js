@@ -21,10 +21,14 @@ class AlbumsHandler {
     try {
       const { id } = request.params;
       const album = await this._services.getAlbumById(id);
+      const songs = await this._services.getSongsByAlbumId(id);
       const response = h.response({
         status: 'success',
         data: {
-          album,
+          album: {
+            ...album,
+            songs,
+          },
         },
       });
       response.code(200);

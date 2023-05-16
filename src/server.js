@@ -35,6 +35,14 @@ const init = async () => {
       },
     },
   ]);
+  server.route({
+    method: '*',
+    path: '/{any*}',
+    handler: (request, h) => h.response({
+      status: 'fail',
+      message: 'Tidak dapat menemukan halaman yang dicari',
+    }).code(404),
+  });
   await server.start();
   console.log(`Server Running on ${server.info.uri}`);
 };

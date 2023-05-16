@@ -26,6 +26,15 @@ class AlbumServices {
     return result.rows[0];
   }
 
+  async getSongsByAlbumId(albumId) {
+    const query = {
+      text: 'SELECT songs.id, songs.title, songs.performer FROM albums JOIN songs on albums.id=songs.album_id WHERE albums.id=$1',
+      values: [albumId],
+    };
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
   async postAlbum({ name, year }) {
     const albumId = `album-${nanoid(16)}`;
     const query = {
