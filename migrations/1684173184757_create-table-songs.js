@@ -17,7 +17,7 @@ exports.up = (pgm) => {
       notNull: true,
     },
     genre: {
-      type: 'TEXT[]',
+      type: 'VARCHAR(255)',
       notNull: true,
     },
     performer: {
