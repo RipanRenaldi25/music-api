@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon ./src/server.js",
-    "migrate": "node-pg-migrate"
+    "migrate": "node-pg-migrate",
+    "lint": "npx eslint ./src"
   },
   "author": "Ripan Renaldi",
   "license": "ISC",
