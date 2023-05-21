@@ -14,6 +14,12 @@ const authenticationValidator = {
       throw new InvariantError(validationResult.error.message);
     }
   },
+  validateDeleteAuthenticationPayload: (payload) => {
+    const validationResult = PutAuthenticationSchema.validate(payload);
+    if (validationResult.error) {
+      throw new InvariantError(validationResult.error.message);
+    }
+  },
 };
 
 module.exports = authenticationValidator;

@@ -36,6 +36,54 @@ class AuthenticationsHandler {
       }).code(500);
     }
   }
+
+  async putAuthenticationHandler(request, h) {
+    try {
+      this._validator.validatePutAuthenticationPayload(request.payload);
+      const { refreshToken } = request.payload;
+      const accessToken = await this._authenticationService.updateAccessToken(refreshToken);
+      return {
+        status: 'success',
+        data: {
+          accessToken,
+        },
+      };
+    } catch (error) {
+      if (error instanceof ClientError) {
+        return h.response({
+          status: 'fail',
+          message: error.message,
+        }).code(error.statusCode);
+      }
+      return h.response({
+        status: 'error',
+        message: error.message,
+      }).code(500);
+    }
+  }
+
+  async deleteAuthenticationHandler(request, h) {
+    try {
+      this._validator.validateDeleteAuthenticationPayload(request.payload);
+      const { refreshToken } = request.payload;
+      await this._authenticationService.deleteRefreshToken(refreshToken);
+      return {
+        status: 'success',
+        message: 'Berhasil logout',
+      };
+    } catch (error) {
+      if (error instanceof ClientError) {
+        return h.response({
+          status: 'fail',
+          message: error.message,
+        }).code(error.statusCode);
+      }
+      return h.response({
+        status: 'error',
+        message: error.message,
+      }).code(500);
+    }
+  }
 }
 
 module.exports = AuthenticationsHandler;

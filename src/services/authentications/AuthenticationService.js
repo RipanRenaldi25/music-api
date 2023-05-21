@@ -29,6 +29,40 @@ class AuthenticationService {
     }
     return [accessToken, refreshToken];
   }
+
+  async verifyRefreshToken(refreshToken) {
+    const query = {
+      text: 'SELECT * FROM authentications WHERE token=$1',
+      values: [refreshToken],
+    };
+    const resultQuery = await this._userService.executeQuery(query.text, query.values);
+    if (!resultQuery.rowCount) {
+      throw new InvariantError('Refresh token tidak valid (db)');
+    }
+  }
+
+  async updateAccessToken(refreshToken) {
+    await this.verifyRefreshToken(refreshToken);
+    const { id } = this._tokenManager.verifySignatureOfToken(refreshToken);
+    const newAccessToken = this._tokenManager.generateToken(
+      { id },
+      process.env.SECRET_ACCESS_TOKEN_KEY,
+    );
+    return newAccessToken;
+  }
+
+  async deleteRefreshToken(refreshToken) {
+    await this.verifyRefreshToken(refreshToken);
+    this._tokenManager.verifySignatureOfToken(refreshToken);
+    const query = {
+      text: 'DELETE FROM authentications WHERE token = $1',
+      values: [refreshToken],
+    };
+    const result = await this._userService.executeQuery(query.text, query.values);
+    if (!result.rowCount) {
+      throw new InvariantError('Data tidak valid');
+    }
+  }
 }
 
 module.exports = AuthenticationService;
