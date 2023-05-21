@@ -1,8 +1,13 @@
 const Joi = require('joi');
 
 // create authentication schema
-const AuthenticationSchema = Joi.object({
-  token: Joi.string().required(),
+const PutAuthenticationSchema = Joi.object({
+  refreshToken: Joi.string().required(),
 });
 
-module.exports = { AuthenticationSchema };
+const PostAuthenticationSchema = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+module.exports = { PutAuthenticationSchema, PostAuthenticationSchema };

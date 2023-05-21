@@ -26,7 +26,7 @@ class UsersService {
 
   async getUserByUsername(username) {
     const query = {
-      text: 'SELECT id, username FROM users WHERE username = $1',
+      text: 'SELECT id, username, password FROM users WHERE username = $1',
       values: [username],
     };
     const queryResult = await this.executeQuery(query.text, query.values);
@@ -69,9 +69,8 @@ class UsersService {
     if (user.length === 0) {
       throw new AuthenticationError('Kredensial yang anda berikan salah');
     }
-    await this.isPasswordValid(password, user.password);
-    console.log(`${password} === ${user.password}`);
-    return user.id;
+    await this.isPasswordValid(password, user[0].password);
+    return user[0].id;
   }
 }
 
