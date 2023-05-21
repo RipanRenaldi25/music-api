@@ -67,14 +67,12 @@ class SongsHandler {
     try {
       const { id } = request.params;
       const song = await this._services.getSongById(id);
-      const response = h.response({
+      return {
         status: 'success',
         data: {
           song,
         },
-      });
-      response.code(200);
-      return response;
+      };
     } catch (error) {
       if (error instanceof ClientError) {
         return h.response({

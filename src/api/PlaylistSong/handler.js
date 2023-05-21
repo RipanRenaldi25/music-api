@@ -13,7 +13,7 @@ class PlaylistSongHandler {
       this._validator.validatePlaylistSongPayload(request.payload);
       const { songId } = request.payload;
       const { id: playlistId } = request.params;
-      const { id: ownerId, username } = request.auth.credentials;
+      const { username } = request.auth.credentials;
       await this._songService.isSongExist(songId);
       await this._playlistService.verifyPlaylistAccess(username, playlistId);
       await this._playlistSongService.addSongToPlaylist(playlistId, songId);
@@ -75,7 +75,7 @@ class PlaylistSongHandler {
       this._validator.validatePlaylistSongPayload(request.payload);
       const { songId } = request.payload;
       const { id: playlistId } = request.params;
-      const { id: credentialId, username } = request.auth.credentials;
+      const { username } = request.auth.credentials;
       await this._playlistService.verifyPlaylistAccess(username, playlistId);
       await this._playlistSongService.deleteSongFromPlaylist(playlistId, songId);
       return {

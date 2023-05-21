@@ -12,6 +12,9 @@
     },
     "rules": {
         "no-underscore-dangle": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "class-methods-use-this": "off",
+        "consistent-return": "off",
+        "no-unused-vars": "off"
     }
 }
