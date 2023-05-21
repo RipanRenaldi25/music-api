@@ -2,7 +2,7 @@ const Jwt = require('@hapi/jwt');
 const InvariantError = require('../exceptions/InvariantError');
 
 class TokenManager {
-  static generateToken({ payload, secretToken }) {
+  static generateToken(payload, secretToken) {
     return Jwt.token.generate(payload, secretToken);
   }
 

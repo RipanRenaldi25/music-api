@@ -65,14 +65,13 @@ class UsersService {
   }
 
   async login({ username, password }) {
-    const user = await this._userService.getUserByUsername(username);
+    const user = await this.getUserByUsername(username);
     if (user.length === 0) {
       throw new AuthenticationError('Kredensial yang anda berikan salah');
     }
-    const isUserValid = await this.isPasswordValid(password, user.password);
-    if (!isUserValid) {
-      throw new AuthenticationError('Kredensial yang anda berikan salah');
-    }
+    await this.isPasswordValid(password, user.password);
+    console.log(`${password} === ${user.password}`);
+    return user.id;
   }
 }
 
