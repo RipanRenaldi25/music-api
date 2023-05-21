@@ -5,7 +5,7 @@ const authenticationValidator = {
   validateAuthenticationPayload: (payload) => {
     const validationResult = AuthenticationSchema.validate(payload);
     if (validationResult.error) {
-      throw new InvariantError('Data tidak sesuai');
+      throw new InvariantError(validationResult.error.message);
     }
   },
 };

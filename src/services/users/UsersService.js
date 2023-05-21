@@ -47,7 +47,7 @@ class UsersService {
     }
   }
 
-  async registerUser({ username, password, fullName }) {
+  async registerUser({ username, password, fullname }) {
     const id = `user-${nanoid(16)}`;
     await this.checkUsername(username);
     const hasedPassword = await hash(password, 10);
@@ -55,9 +55,9 @@ class UsersService {
     // register user
     const query = {
       text: 'INSERT INTO users(id, username, password, full_name) VALUES($1, $2, $3, $4) RETURNING id',
-      values: [id, username, hasedPassword, fullName],
+      values: [id, username, hasedPassword, fullname],
     };
-    const queryResult = this.executeQuery(query.text, query.values);
+    const queryResult = await this.executeQuery(query.text, query.values);
     if (!queryResult.rowCount) {
       throw new InvariantError('Data tidak valid');
     }

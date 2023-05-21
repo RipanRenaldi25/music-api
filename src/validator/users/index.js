@@ -5,7 +5,7 @@ const userValidator = {
   validateUserPayload: (payload) => {
     const validationResult = UserSchema.validate(payload);
     if (validationResult.error) {
-      throw new InvariantError('Data tidak valid');
+      throw new InvariantError(validationResult.error.message);
     }
   },
 };
