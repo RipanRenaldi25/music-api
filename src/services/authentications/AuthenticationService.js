@@ -12,11 +12,11 @@ class AuthenticationService {
   async verifyUser({ username, password }) {
     const id = await this._userService.login({ username, password });
     const refreshToken = await this._tokenManager.generateToken(
-      { id },
+      { id, username },
       process.env.SECRET_REFRESH_TOKEN_KEY,
     );
     const accessToken = await this._tokenManager.generateToken(
-      { id },
+      { id, username },
       process.env.SECRET_ACCESS_TOKEN_KEY,
     );
     const query = {
@@ -43,9 +43,9 @@ class AuthenticationService {
 
   async updateAccessToken(refreshToken) {
     await this.verifyRefreshToken(refreshToken);
-    const { id } = this._tokenManager.verifySignatureOfToken(refreshToken);
+    const { id, username } = this._tokenManager.verifySignatureOfToken(refreshToken);
     const newAccessToken = this._tokenManager.generateToken(
-      { id },
+      { id, username },
       process.env.SECRET_ACCESS_TOKEN_KEY,
     );
     return newAccessToken;
