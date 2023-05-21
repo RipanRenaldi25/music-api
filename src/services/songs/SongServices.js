@@ -73,6 +73,29 @@ class SongServices {
       throw new NotFoundError('Gagal menghapus data. Pastikan id sudah benar');
     }
   }
+
+  async isSongExist(id) {
+    const query = {
+      text: 'SELECT * FROM songs WHERE id = $1',
+      values: [id],
+    };
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      throw new NotFoundError('Lagu tidak ditemukan');
+    }
+  }
+
+  async getSongByPlaylistId(playlistId) {
+    const query = {
+      text: 'SELECT songs.id, songs.title, songs.performer FROM songs INNER JOIN playlist_songs on songs.id = playlist_songs.id_song WHERE playlist_songs.id_playlist = $1',
+      values: [playlistId],
+    };
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      throw new NotFoundError('Data tidak ada');
+    }
+    return result.rows;
+  }
 }
 
 module.exports = SongServices;

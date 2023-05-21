@@ -41,6 +41,7 @@ class PlaylistsService {
   }
 
   async verifyPlaylistAccess(owner, playlistId) {
+    await this.isPlaylistExist(playlistId);
     const query = {
       text: 'SELECT * FROM playlists WHERE username=$1 and id=$2',
       values: [owner, playlistId],
@@ -51,15 +52,26 @@ class PlaylistsService {
     }
   }
 
-  async deletePlaylist(userId, playlistId) {
-    await this.verifyPlaylistAccess(userId, playlistId);
+  async deletePlaylist(owner, playlistId) {
+    await this.verifyPlaylistAccess(owner, playlistId);
     const query = {
       text: 'DELETE FROM playlists WHERE id = $1',
-      values: [userId],
+      values: [playlistId],
     };
     const result = await this.executeQuery(query.text, query.values);
     if (!result.rowCount) {
       throw new InvariantError('Gagal menghapus playlist');
+    }
+  }
+
+  async isPlaylistExist(playlistId) {
+    const query = {
+      text: 'SELECT * FROM playlists where id = $1',
+      values: [playlistId],
+    };
+    const result = await this.executeQuery(query.text, query.values);
+    if (!result.rowCount) {
+      throw new NotFoundError('Playlist tidak ada');
     }
   }
 }

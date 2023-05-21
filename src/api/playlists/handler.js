@@ -62,9 +62,9 @@ class PlaylistHandler {
 
   async deletePlaylistHandler(request, h) {
     try {
-      const { id: ownerId } = request.auth.credentials;
+      const { username } = request.auth.credentials;
       const { id } = request.params;
-      await this._playlistService.deletePlaylist(ownerId, id);
+      await this._playlistService.deletePlaylist(username, id);
       const response = h.response({
         status: 'success',
         message: 'Berhasil menghapus data',
